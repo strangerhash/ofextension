@@ -1,0 +1,588 @@
+<div id = "popup_root" >
+
+	<div id = "header" >
+
+		<div class="icon menu" style="margin-left: 17px" v-on:click="handle_event( 'menu_button_click' )">
+			<svg viewBox="0 0 24 24">
+				<path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+			</svg>
+		</div>
+
+		<div style="flex-grow: 1"></div>
+
+		<span v-if = "model.active_page_name === 'main'" >OnlyFans Expired Fans Follower</span>
+		<span v-if = "model.active_page_name === 'popup'" >OnlyFans Expired Fans Follower</span>
+		<span v-if = "model.active_page_name === 'nothing_detected'" >Nothing Detected</span>
+		<span v-if = "model.active_page_name === 'progress'" >Loading...</span>
+
+		<div style="flex-grow: 1"></div>
+
+		<div class="icon close" style="margin-right: 15px; margin-left: 2px;" v-on:click="handle_event( 'close_button_click' )">
+			<svg viewBox="0 0 24 24">
+				<path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+			</svg>
+		</div>
+
+		<div id = "dropshadow" ></div>
+
+	</div>
+
+	<div class = "page_container" >
+
+		<div class = "page progress" v-bind:class = "{ active: model.active_page_name === 'progress' }" >
+
+			<img v-bind:src = "model.root_url + '/chromane/img/progress.svg'" >
+
+		</div>
+
+		<div class = "page popup" v-bind:class = "{ active: model.active_page_name === 'popup' }" >
+
+			<div>
+
+				<h1 style = "margin-top: 0px;" >OnlyFans Expired Fans Follower</h1>
+
+				<p style = "margin-bottom: 22px; font-size: 16px;" >
+					Save time and money by using this chrome extension to automatically follow your expired fans on OnlyFans.
+				</p>
+
+				<div id = "iframe_container" ></div>
+
+			</div>
+
+		</div>
+
+		<div class = "page main" v-bind:class = "{ active: model.active_page_name === 'main' }" >
+
+			<div class = "service-item" v-if = "model.collect_model.active" >
+
+				<div class = "service-item-header" >
+
+					<div class = "service-item-header-step">Step 1</div>
+					<div class = "service-item-header-text">
+
+						Collect eligible expired accounts
+
+					</div>
+
+				</div>
+
+				<div class = "service-item-body">
+
+					<div class = "small-table" >
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Expired</div>
+							<div class = "st-cell-2" v-text = "model.collect_model.metrics.expired" ></div>
+
+						</div>
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Collected</div>
+							<div class = "st-cell-2" v-text = "model.collect_model.metrics.collected" ></div>
+
+						</div>
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Eligible</div>
+							<div class = "st-cell-2" v-text = "model.collect_model.metrics.eligible" ></div>
+
+						</div>
+
+					</div>
+
+					<div style = "height: 12px" ></div>
+
+					<div class="message-red" v-if = "model.collect_model.error_message" v-text = "model.collect_model.error_message" ></div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class = "button button-green" v-on:click = "handle_event( 'start_collecting_click' )" v-if = "model.collect_model.status === 'idle'" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M12,5.5A3.5,3.5 0 0,1 15.5,9A3.5,3.5 0 0,1 12,12.5A3.5,3.5 0 0,1 8.5,9A3.5,3.5 0 0,1 12,5.5M5,8C5.56,8 6.08,8.15 6.53,8.42C6.38,9.85 6.8,11.27 7.66,12.38C7.16,13.34 6.16,14 5,14A3,3 0 0,1 2,11A3,3 0 0,1 5,8M19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14C17.84,14 16.84,13.34 16.34,12.38C17.2,11.27 17.62,9.85 17.47,8.42C17.92,8.15 18.44,8 19,8M5.5,18.25C5.5,16.18 8.41,14.5 12,14.5C15.59,14.5 18.5,16.18 18.5,18.25V20H5.5V18.25M0,20V18.5C0,17.11 1.89,15.94 4.45,15.6C3.86,16.28 3.5,17.22 3.5,18.25V20H0M24,20H20.5V18.25C20.5,17.22 20.14,16.28 19.55,15.6C22.11,15.94 24,17.11 24,18.5V20Z" />
+							</svg>
+						</div>
+						<span>Start collecting expired accounts</span>
+
+					</div>
+
+					<div class = "button button-green" v-if = "model.collect_model.status === 'collecting'"  >
+
+						<div class = "button-icon" >
+							<div class = "chromane-button-spinner" ></div>
+						</div>
+						<span>Collecting expired accounts...</span>
+
+					</div>
+	
+					<div class = "button button-red" v-on:click = "handle_event( 'stop_collecting_click' )" v-if = "model.collect_model.status === 'collecting'" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
+							</svg>
+						</div>
+						<span>Stop collecting expired accounts</span>
+
+					</div>
+
+					<div class = "button button-red" v-on:click = "handle_event( 'delete_collected_accounts' )" v-if = "model.collect_model.status === 'idle'" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8.46,11.88L9.87,10.47L12,12.59L14.12,10.47L15.53,11.88L13.41,14L15.53,16.12L14.12,17.53L12,15.41L9.88,17.53L8.47,16.12L10.59,14L8.46,11.88M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" />
+							</svg>
+						</div>
+						<span>Delete collected accounts</span>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class = "service-item" v-if = "model.active_second_section_name === 'follow'" >
+
+				<div class = "service-item-header" >
+
+					<div class = "service-item-header-step">Step 2</div>
+
+					<div class = "service-item-header-text">
+
+						Auto-follow collected accounts
+
+					</div>
+
+				</div>
+
+				<div class = "service-item-body">
+
+					<div class = "small-table" >
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Remaining credits</div>
+							<div class = "st-cell-2" v-text = "model.follow_model.metrics.credits" ></div>
+
+						</div>
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Eligible total</div>
+							<div class = "st-cell-2" v-text = "model.follow_model.metrics.eligible" ></div>
+
+						</div>
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Followed total</div>
+							<div class = "st-cell-2" v-text = "model.follow_model.metrics.followed_total" ></div>
+
+						</div>
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Last followed</div>
+							<div class = "st-cell-2" >
+
+								<a
+									target = "_blank"
+									v-bind:href = "model.follow_model.metrics.last_followed_url"
+									v-text = "model.follow_model.metrics.last_followed_name"
+									v-if = "model.follow_model.metrics.last_followed_name" >
+								</a>
+
+								<span v-if = "!model.follow_model.metrics.last_followed_name" >N/A</span>
+
+							</div>
+
+						</div>
+
+						<div class = "st-row" >
+
+							<div class = "st-cell-1" >Next in line</div>
+							<div class = "st-cell-2" >
+
+								<a
+									target = "_blank"
+									v-bind:href = "model.follow_model.metrics.next_in_line_url"
+									v-text = "model.follow_model.metrics.next_in_line_name"
+									v-if = "model.follow_model.metrics.next_in_line_name" >
+								</a>
+
+								<span v-if = "!model.follow_model.metrics.next_in_line_name" >N/A</span>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div style = "height: 12px" ></div>
+
+					<div class = "message-red" v-if = "model.follow_model.error_message" v-text = "model.follow_model.error_message" ></div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class = "button button-green" v-on:click = "handle_event( 'start_following_click' )" v-if = "model.follow_model.status === 'idle'" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12M5,13.28L7.45,14.77L6.8,11.96L9,10.08L6.11,9.83L5,7.19L3.87,9.83L1,10.08L3.18,11.96L2.5,14.77L5,13.28Z" />
+							</svg>
+						</div>
+						<span>Start following eligible accounts</span>
+
+					</div>
+
+					<div class = "button button-green" v-if = "model.follow_model.status === 'following'"  >
+
+						<div class = "button-icon" >
+							<div class = "chromane-button-spinner" ></div>
+						</div>
+						<span>Following eligible accounts...</span>
+
+					</div>
+	
+					<div class = "button button-red" v-on:click = "handle_event( 'stop_following_click' )" v-if = "model.follow_model.status === 'following'" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
+							</svg>
+						</div>
+						<span>Stop following eligible accounts</span>
+
+					</div>
+
+					<div class = "button button-green" v-if = "model.follow_model.purchase_credits_status === 'idle'" v-on:click = "handle_event( 'go_to_purchase' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M20 15V18H23V20H20V23H18V20H15V18H18V15H20M23 10L22.96 10.29L22 13.8C21.11 13.29 20.09 13 19 13C15.69 13 13 15.69 13 19C13 19.7 13.13 20.37 13.35 21H5.5C4.72 21 4.04 20.55 3.71 19.9L1.1 10.44L1 10C1 9.45 1.45 9 2 9H6.58L11.18 2.43C11.36 2.17 11.66 2 12 2S12.65 2.17 12.83 2.44L17.42 9H22C22.55 9 23 9.45 23 10M14 15C14 13.9 13.11 13 12 13S10 13.9 10 15 10.9 17 12 17 14 16.11 14 15M15 9L12 4.74L9 9H15Z" />
+							</svg>
+						</div>
+						<span>Purchase more credits</span>
+
+					</div>
+
+					<div class = "button button-green" v-if = "model.follow_model.purchase_credits_status === 'progress'" >
+
+						<div class = "button-icon" >
+							<div class = "chromane-button-spinner" ></div>
+						</div>
+						<span>Processing...</span>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class = "service-item" v-if = "model.active_second_section_name === 'purchase'" >
+
+				<div class = "service-item-header" >
+
+					<div class = "service-item-header-step" style = "width: 88px" >Credits</div>
+
+					<div class = "service-item-header-text">
+
+						Purchase more credits
+
+					</div>
+
+				</div>
+
+				<div class = "service-item-body" >
+
+					<div
+						class = "purchase-option"
+						v-for = "option in model.purchase_model.option_data_arr"
+						v-on:click = "handle_event( 'purchase_option_click', { option } )"
+						v-bind:class = "{
+							selected: option.selected,
+						}"
+					>
+
+						<div class = "purchase-option-item" >
+							<div class = "purchase-option-item-name" >Price</div>
+							<div class = "purchase-option-item-value" v-text = "option.price_text" ></div>
+						</div>
+
+						<div class = "purchase-option-item" >
+							<div class = "purchase-option-item-name" >Follows</div>
+							<div class = "purchase-option-item-value" v-text = "option.credits_text" ></div>
+						</div>
+
+						<div class = "purchase-option-item" v-if = "option.credits_per_dollar !== 'hidden'" >
+							<div class = "purchase-option-item-name" >Follows per $1</div>
+							<div class = "purchase-option-item-value" v-text = "option.credits_per_dollar" ></div>
+						</div>
+
+					</div>
+
+					<div class = "form-item" >
+
+						<div class = "form-item-label" >Promo code</div>
+						<input type = "text" class = "form-item-input" placeholder="Promo code" v-model = "model.purchase_model.promo_code" v-on:input = "handle_event( 'promo_code_input' )" >
+
+					</div>
+
+					<div class="message-green" v-if = "model.purchase_model.promo_code_status === 'success'" v-text = "model.purchase_model.promo_code_success_message" ></div>
+					<div class="message-red" v-if = "model.purchase_model.promo_code_status === 'failure'" v-text = "model.purchase_model.promo_code_failure_message" ></div>
+					<div class="chromane-spinner" v-if = "model.purchase_model.promo_code_status === 'progress'" style = "margin-bottom: 8px;" ></div>
+
+					<div class = "button button-green" v-if = "model.follow_model.purchase_credits_status === 'idle'" v-on:click = "handle_event( 'purchase_more_credits' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M20 15V18H23V20H20V23H18V20H15V18H18V15H20M23 10L22.96 10.29L22 13.8C21.11 13.29 20.09 13 19 13C15.69 13 13 15.69 13 19C13 19.7 13.13 20.37 13.35 21H5.5C4.72 21 4.04 20.55 3.71 19.9L1.1 10.44L1 10C1 9.45 1.45 9 2 9H6.58L11.18 2.43C11.36 2.17 11.66 2 12 2S12.65 2.17 12.83 2.44L17.42 9H22C22.55 9 23 9.45 23 10M14 15C14 13.9 13.11 13 12 13S10 13.9 10 15 10.9 17 12 17 14 16.11 14 15M15 9L12 4.74L9 9H15Z" />
+							</svg>
+						</div>
+						<span v-text = "model.purchase_model.purchase_button_text" ></span>
+
+					</div>
+
+					<div class = "button button-green" v-if = "model.follow_model.purchase_credits_status === 'progress'" >
+
+						<div class = "button-icon" >
+							<div class = "chromane-button-spinner" ></div>
+						</div>
+						<span>Processing...</span>
+
+					</div>
+
+					<div class = "button button-red" v-if = "model.follow_model.purchase_credits_status === 'idle'" v-on:click = "handle_event( 'purchase_go_back' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M20,10V14H11L14.5,17.5L12.08,19.92L4.16,12L12.08,4.08L14.5,6.5L11,10H20Z" />
+							</svg>
+						</div>
+						<span>Go back</span>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class = "service-item" v-if = "model.active_second_section_name === 'auth'" >
+
+				<div class = "service-item-header" >
+
+					<div class = "service-item-header-step">Step 2</div>
+
+					<div class = "service-item-header-text">
+
+						<span v-if = "model.auth_model.stage_name === 'sign_up'" >Sign up to auto-follow</span>
+						<span v-if = "model.auth_model.stage_name === 'log_in'" >Log in to auto-follow</span>
+
+					</div>
+
+				</div>
+
+				<div class = "service-item-body" v-if = "model.auth_model.stage_name === 'sign_up'" >
+
+					<div class = "form-item" >
+
+						<div class = "form-item-label" >email</div>
+						<input type = "text" class = "form-item-input" placeholder="email" v-model = "model.auth_model.email" v-on:keypress = "handle_event( 'auth_keypress', { event: $event } )" >
+
+					</div>
+
+					<div class = "form-item" >
+
+						<div class = "form-item-label" >password</div>
+						<input type = "password" class = "form-item-input" placeholder="password" v-model = "model.auth_model.password" v-on:keypress = "handle_event( 'auth_keypress', { event: $event } )" >
+
+					</div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class="message-red" v-if = "model.auth_model.error_message" v-text = "model.auth_model.error_message" ></div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class = "button button-green" v-on:click = "handle_event( 'auth_sign_up' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z" />
+							</svg>
+						</div>
+						<span>Sign up</span>
+
+					</div>
+
+					<div class = "auth-already" >
+						Already have an account?
+					</div>
+
+					<div class = "button button-grey" v-on:click = "handle_event( 'auth_go_to_log_in' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z" />
+							</svg>
+						</div>
+						<span>Log in</span>
+
+					</div>
+
+				</div>
+
+				<div class = "service-item-body" v-if = "model.auth_model.stage_name === 'log_in'" >
+
+					<div class = "form-item" >
+
+						<div class = "form-item-label" >email</div>
+						<input type = "text" class = "form-item-input" placeholder="email" v-model = "model.auth_model.email" v-on:keypress = "handle_event( 'auth_keypress', { event: $event } )" >
+
+					</div>
+
+					<div class = "form-item" >
+
+						<div class = "form-item-label" >password</div>
+						<input type = "password" class = "form-item-input" placeholder="password" v-model = "model.auth_model.password" v-on:keypress = "handle_event( 'auth_keypress', { event: $event } )" >
+
+					</div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class="message-red" v-if = "model.auth_model.error_message" v-text = "model.auth_model.error_message" ></div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class = "button button-green" v-on:click = "handle_event( 'auth_log_in' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z" />
+							</svg>
+						</div>
+						<span>Log in</span>
+
+					</div>
+
+					<div class = "auth-already" >
+						Don't have an account?
+					</div>
+
+					<div class = "button button-grey" v-on:click = "handle_event( 'auth_go_to_sign_up' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z" />
+							</svg>
+						</div>
+						<span>Sign up</span>
+
+					</div>
+
+				</div>
+
+				<div class = "service-item-body" v-if = "model.auth_model.stage_name === 'sign_up_success'" >
+
+					<div class="message-green" v-if = "model.auth_model.success_message" v-text = "model.auth_model.success_message" ></div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class = "button button-green" v-on:click = "handle_event( 'auth_success_continue' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M4,10V14H13L9.5,17.5L11.92,19.92L19.84,12L11.92,4.08L9.5,6.5L13,10H4Z" />
+							</svg>
+						</div>
+						<span>Continue</span>
+
+					</div>
+					
+				</div>
+
+				<div class = "service-item-body" v-if = "model.auth_model.stage_name === 'log_in_success'" >
+
+					<div class="message-green" v-if = "model.auth_model.success_message" v-text = "model.auth_model.success_message" ></div>
+
+					<div style = "height: 6px" ></div>
+
+					<div class = "button button-green" v-on:click = "handle_event( 'auth_success_continue' )" >
+
+						<div class = "button-icon" >
+							<svg viewBox="0 0 24 24">
+								<path d="M4,10V14H13L9.5,17.5L11.92,19.92L19.84,12L11.92,4.08L9.5,6.5L13,10H4Z" />
+							</svg>
+						</div>
+						<span>Continue</span>
+
+					</div>
+					
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class = "page nothing_detected" v-bind:class = "{ active: model.active_page_name === 'nothing_detected' }" >
+
+			<div class = "service-item" >
+
+				<img v-bind:src = "model.root_url + '/project/img/blank-page.svg'" >
+				<div class = "service-item-headline" >Nothing detected</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div id = "drawer_overlay" v-on:click="handle_event( 'drawer_overlay_click' )">
+
+		<div id="drawer" v-on:click="handle_event( 'drawer_click', { event: $event } )">
+
+			<div id="drawer_header">OnlyFans Expired Fans Follower</div>
+
+			<div class="drawer_item_container">
+
+				<div class = "drawer_item" v-on:click = "handle_event( 'drawer_item_click', { item_name: 'log_out' } )" v-if = "model.drawer_item_hash.log_out" >
+
+					<svg class = "drawer_item_icon" viewBox = "0 0 24 24" >
+						<path d="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z" />
+					</svg>
+
+					<span>Log out</span>
+
+				</div>
+
+				<div class = "drawer_item" v-on:click = "handle_event( 'drawer_item_click', { item_name: 'toggle_present_mode' } )" v-if = "model.drawer_item_hash.toggle_present_mode" >
+
+					<svg class = "drawer_item_icon" viewBox = "0 0 24 24" >
+						<path d="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z" />
+					</svg>
+
+					<span>Toggle present mode</span>
+
+				</div>
+
+				<div class = "drawer_item" v-on:click = "handle_event( 'drawer_item_click', { item_name: 'download_log' } )" v-if = "model.drawer_item_hash.download_log" >
+
+					<svg class = "drawer_item_icon" viewBox = "0 0 24 24" >
+						<path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+					</svg>
+
+					<span>Download log</span>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

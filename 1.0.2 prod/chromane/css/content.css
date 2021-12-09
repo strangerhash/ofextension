@@ -1,0 +1,158 @@
+
+	#chromane_cover {
+
+		display: none;
+
+		position: fixed;
+		z-index: 7000;
+
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 100%;
+
+		background-color: rgba( 0, 0, 0, 0.75 );
+
+	}
+
+	#chromane_cover.active {
+
+		display: block;
+
+	}
+
+	#chromane_iframe_container {
+
+		position: fixed;
+		z-index: 8000;
+
+		top: 0px;
+		height: 100%;
+		right: -540px;
+		width: 540px;
+
+		box-shadow: 3px 0px 6px rgba(0,0,0,0.16), 3px 0px 6px rgba(0,0,0,0.23);
+
+		transition: all 0.2s ease;
+
+	}
+
+	#chromane_iframe_container.chromane-wide {
+
+		right: -660px;
+		width: 660px;
+
+	}
+
+	#chromane_iframe_container.active {
+
+		right: 0px;
+
+	}
+
+	#chromane_iframe_container iframe {
+
+		position: relative;
+		z-index: 400;
+
+		display: block;
+
+		height: 100%;
+		width: 100%;
+
+		border: none;
+
+	}
+
+	#chromane_iframe_container.chromane-hidden {
+
+		display: none !important;
+
+	}
+
+	#chromane_iframe_toggle_button {
+
+		position: absolute;
+		z-index: 200;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		top: 100px;
+		left: -30px;
+		height: 50px;
+		width: 30px;
+
+		background-color: #1C1C1C;
+		box-shadow: 3px 0px 6px rgb(0 0 0 / 16%), 3px 0px 6px rgb(0 0 0 / 23%);
+		cursor: pointer;
+
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+
+	}
+
+	#chromane_iframe_container .chromane_chevron_left {
+
+		display: block;
+
+	}
+
+	#chromane_iframe_container.active .chromane_chevron_left {
+
+		display: none;
+
+	}
+
+	#chromane_iframe_container .chromane_chevron_right {
+
+		display: none;
+
+	}
+
+	#chromane_iframe_container.active .chromane_chevron_right {
+
+		display: block;
+
+	}
+
+	/* overrides */
+
+		.chromane-present-mode .g-user-name {
+
+			filter: blur( 5px );
+
+		}
+
+		.chromane-present-mode .g-avatar {
+
+			filter: blur( 15px );
+
+		}
+
+		.chromane-present-mode .g-user-username {
+
+			filter: blur( 5px );
+
+		}
+
+		.chromane-present-mode .b-story-item {
+
+			filter: blur( 15px );
+
+		}
+
+		.chromane-present-mode .b-profile__header__cover-img {
+
+			filter: blur( 40px );
+
+		}
+
+		.chromane-present-mode .m-type-post {
+
+			filter: blur( 40px );
+
+		}
+
+	/**/
